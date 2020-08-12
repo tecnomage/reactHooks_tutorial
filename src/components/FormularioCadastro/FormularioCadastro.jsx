@@ -4,8 +4,10 @@ import {
 } from '@material-ui/core';
 
 function FormularioCadastro() {
-  const initialState = { sobrenome: 'braga', CPF: '0000000000' };
-  const [nome, setNome] = useState('');
+  const initialState = {
+    sobrenome: 'braga', CPF: '0000000000', promocoes: true, novidades: true,
+  };
+  const [nome, setNome] = useState('Vinicius');
   const [dados, setDados] = useReducer(reducer, initialState);
 
   function reducer(state, newstate) {
@@ -13,18 +15,16 @@ function FormularioCadastro() {
     return ({ ...state, ...newstate });
   }
 
-  function setValue(chave, valor) {
-    chave = valor;
-    console.log(chave);
-    return chave;
-  }
-
   function handleInput(e) {
     // e.target.name = e.target.value
     const { name, value } = e.target;
-    console.log(name);
-    console.log(value);
-    setDados({[name]: value });
+    setDados({ [name]: value });
+  }
+
+  function handleChecked(e) {
+    // e.target.name = e.target.value
+    const { name, checked } = e.target;
+    setDados({ [name]: checked });
   }
 
   function handleNome(e) {
@@ -47,6 +47,7 @@ function FormularioCadastro() {
         }}
         id="nome"
         name="nome"
+        value={nome}
         label="Nome"
         variant="outlined"
         margin="normal"
@@ -56,7 +57,7 @@ function FormularioCadastro() {
         onChange={(event) => {
           handleInput(event);
         }}
-        id="sobrenome" 
+        id="sobrenome"
         name="sobrenome"
         value={dados.sobrenome}
         label="Sobrenome"
@@ -69,6 +70,8 @@ function FormularioCadastro() {
           handleInput(event);
         }}
         id="CPF"
+        value={dados.CPF}
+        name="CPF"
         label="CPF"
         variant="outlined"
         margin="normal"
@@ -77,12 +80,13 @@ function FormularioCadastro() {
 
       <FormControlLabel
         label="Promoções"
-        control={<Switch name="promocoes" defaultChecked color="primary" />}
+        name="promocoes"
+        control={<Switch name="promocoes" defaultChecked={dados.promocoes} onChange={(event) => handleChecked(event)} color="primary" />}
       />
 
       <FormControlLabel
         label="Novidades"
-        control={<Switch name="promocoes" defaultChecked color="primary" />}
+        control={<Switch name="novidades" defaultChecked={dados.novidades} color="primary" />}
       />
 
       <Button type="submit" variant="contained" color="primary">
